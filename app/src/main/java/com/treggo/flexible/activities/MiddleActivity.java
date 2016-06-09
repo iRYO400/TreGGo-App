@@ -17,7 +17,7 @@ import com.treggo.flexible.utilities.TinyDB;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MiddleActivity extends AppCompatActivity {
 
     private TinyDB tinyDB;
     private String boardType;

@@ -1,80 +1,93 @@
 package com.treggo.flexible.activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.shamanland.fab.FloatingActionButton;
 import com.treggo.flexible.R;
+import com.treggo.flexible.adapters.MainModelsAdapter;
+import com.treggo.flexible.adapters.RealmMainModelsAdapter;
+import com.treggo.flexible.app.Preferences;
+import com.treggo.flexible.app.RealmController;
 import com.treggo.flexible.model.Board;
-import com.treggo.flexible.utilities.MyListViewAdapter;
+import com.treggo.flexible.model.MainModel;
 import com.treggo.flexible.utilities.TinyDB;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class TopActivity extends AppCompatActivity {
 
-    private ListView listView;
+    private MainModelsAdapter mmAdapter;
+    private RecyclerView recyclerView;
     private FloatingActionButton fab;
+
+    private Realm realm;
 
     private ArrayList<String> spTemplates;
     private ArrayAdapter<String> spinnerAdapter;
 
     private ArrayList<Board> boardList;
-    private MyListViewAdapter myListViewAdapter;
+
 
     private TinyDB tinyDB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         tinyDB = new TinyDB(this);
         boardList = new ArrayList<>();
         boardList = tinyDB.getListBoards("AllBoards", Board.class);
-        myListViewAdapter = new MyListViewAdapter(this, boardList);
 
+        fab = (FloatingActionButton) findViewById(R.id.fabTop);
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerTop);
+
+        //get realm Instance
+        this.realm = RealmController.with(this).getRealm();
+
+        //set Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTop);
+        setSupportActionBar(toolbar);
+
+        setupRecyclerView();
+
+        if(!Preferences.with(this).getPreLoad()){
+            setRealmData();
+        }
+
+        //waiting for REFRESH Realm instance
+//        RealmController.with(this).waitForChange();
+
+        // get all persisted objects
+        // create the helper adapter and notify data set changes
+        // changes will be reflected automatically
+        setRealmAdapter(RealmController.with(this).getMainModels());
+
+        //Adding Spinner items
         spTemplates = new ArrayList<>();
         spTemplates.add("Base Four");
         spTemplates.add("Week");
         spTemplates.add("Months");
-
-        listView = (ListView) findViewById(R.id.myListView);
-
-        listView.setAdapter(myListViewAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-                Intent intent = new Intent(TopActivity.this, MainActivity.class);
-                tinyDB.putString("BoardType", myListViewAdapter.getBoard(position).getType());
-                tinyDB.putString("BoardName", myListViewAdapter.getBoard(position).getName());
-                startActivity(intent);
-                Toast.makeText(TopActivity.this, myListViewAdapter.getBoard(position).getName()
-                        +  " " + position + " "
-                        + myListViewAdapter.getBoard(position).getType(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
+        //Spinner Adapter
         spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spTemplates);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        //FAB
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,6 +98,7 @@ public class TopActivity extends AppCompatActivity {
                     final Spinner spinner = (Spinner) subView.findViewById(R.id.spinner);
                     spinner.setAdapter(spinnerAdapter);
                     spinner.setSelection(1);
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(TopActivity.this);
                     builder.setTitle("Create your Board");
                     builder.setMessage("Name it, and choose Template");
@@ -93,30 +107,93 @@ public class TopActivity extends AppCompatActivity {
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(!editName.getText().toString().equals("")) {
+                            MainModel mainModel = new MainModel();
+                            mainModel.setId(RealmController.getInstance().getMainModels().size()+1);
+                            mainModel.setNameBoard(editName.getText().toString());
+                            mainModel.setBoardType(spinner.getSelectedItemPosition());
 
+                            if(editName.getText().toString().equals("")){
+                                Toast.makeText(TopActivity.this, "ENTER CORRECT NAME", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
                                 //Добавили в имя и тип
-                                Board board = new Board();
-                                board.setName(editName.getText().toString());
-                                board.setType(spinner.getSelectedItem().toString());
-                                boardList.add(board);
-                                //Сохранили его
-                                tinyDB.putListBoards("AllBoards", boardList);
-
-
+                                realm.beginTransaction();
+                                realm.copyToRealm(mainModel);
+                                realm.commitTransaction();
+                                mmAdapter.notifyDataSetChanged();
+                                recyclerView.scrollToPosition(RealmController.getInstance().getMainModels().size()-1);
                             }
                         }
                     });
                     builder.setNegativeButton("Cancel", null);
                     builder.show();
-
-    //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-    //                        .setAction("Action", null).show();
                 }
             });
         }
-//        listView.setOnTouchListener(new ShowHideOnScroll(fab));
     }
 
+    public void setRealmAdapter(RealmResults<MainModel> mainModels){
 
+        RealmMainModelsAdapter modelsAdapter = new RealmMainModelsAdapter(this.getApplicationContext(), mainModels, true);
+        mmAdapter.setRealmAdapter(modelsAdapter);
+        mmAdapter.notifyDataSetChanged();
+    }
+
+    private void setupRecyclerView(){
+
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        mmAdapter = new MainModelsAdapter(this);
+        recyclerView.setAdapter(mmAdapter);
+    }
+
+    private void setRealmData() {
+
+        ArrayList<MainModel> mModels = new ArrayList<>();
+
+        MainModel mModel = new MainModel();
+
+        mModel.setId(1 + System.currentTimeMillis());
+        mModel.setNameBoard("Reto Meier");
+        mModel.setBoardType(0);
+        mModels.add(mModel);
+
+        mModel = new MainModel();
+        mModel.setId(2 + System.currentTimeMillis());
+        mModel.setNameBoard("Itzik Ben-Gan");
+        mModel.setBoardType(1);
+        mModels.add(mModel);
+
+        mModel = new MainModel();
+        mModel.setId(3 + System.currentTimeMillis());
+        mModel.setNameBoard("Magnus Lie Hetland");
+        mModel.setBoardType(2);
+        mModels.add(mModel);
+
+        mModel = new MainModel();
+        mModel.setId(4 + System.currentTimeMillis());
+        mModel.setNameBoard("Chad Fowler");
+        mModel.setBoardType(3);
+        mModels.add(mModel);
+
+        mModel = new MainModel();
+        mModel.setId(5 + System.currentTimeMillis());
+        mModel.setNameBoard("Yashavant Kanetkar");
+        mModel.setBoardType(4);
+        mModels.add(mModel);
+
+
+        for (MainModel b : mModels) {
+            // Persist your data easily
+            realm.beginTransaction();
+            realm.copyToRealm(b);
+            realm.commitTransaction();
+        }
+        Preferences.with(this).setPreLoad(true);
+
+    }
 }
+
