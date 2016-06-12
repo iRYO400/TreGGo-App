@@ -1,23 +1,14 @@
 package com.treggo.flexible.model;
 
 
-import java.io.Serializable;
+import io.realm.RealmObject;
 
 /**
  * Created by iRYO400 on 08.06.2016.
  */
-public class CardFace implements Serializable {
+public class Card extends RealmObject {
 
     private String name;
-    private int color;
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
-    }
 
     public String getName() {
         return name;

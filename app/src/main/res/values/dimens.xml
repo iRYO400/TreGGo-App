@@ -6,6 +6,7 @@
     <dimen name="viewpager_margin_fix">32dp</dimen>
     <dimen name="header_height">150dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="toolbar_height">100dp</dimen>
     <dimen name="fab_marginRight">8dp</dimen>
     <dimen name="fab_marginBottom">-20dp</dimen>
     <dimen name="text_margin">16dp</dimen>

@@ -22,8 +22,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:text="Count of Lists!"/>
+        android:text="COLUMNS!"/>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <TextView
+            android:id="@+id/customTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom?"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginRight="10dp" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/customTV"/>
+    </RelativeLayout>
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

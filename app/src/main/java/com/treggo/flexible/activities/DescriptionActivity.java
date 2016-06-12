@@ -8,27 +8,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.treggo.flexible.R;
-import com.treggo.flexible.model.CardFace;
+import com.treggo.flexible.app.RealmController;
+import com.treggo.flexible.model.Board;
+import com.treggo.flexible.model.Card;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+
 public class DescriptionActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ArrayList<CardFace> cardFaces;
-    private int position;
+    private Realm realm;
+    private Board board;
+    private long boardID;
+    private int bPosition;
+    private int lPosition;
+    private int cPosition;
 
     private FloatingActionButton miniFab1;
     private FloatingActionButton miniFab2;
@@ -45,11 +50,24 @@ public class DescriptionActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+
+        this.realm = RealmController.with(this).getRealm();
+
         initViewStuff();
 
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            boardID = extras.getLong("c_bID");
+            bPosition = extras.getInt("c_bPosition");
+            lPosition = extras.getInt("c_lPosition");
+            cPosition = extras.getInt("c_cPosition");
+        }
+        board = realm.where(Board.class).equalTo("id", boardID).findFirst();
 
+        if(board.getMyLists().get(lPosition).getCards().get(cPosition).isValid()) {
+            collapsingToolbarLayout.setTitle(board.getMyLists().get(lPosition).getCards().get(cPosition).getName());
+        }
     }
-
 
 
     private void initViewStuff(){
@@ -59,10 +77,9 @@ public class DescriptionActivity extends AppCompatActivity implements View.OnCli
         layoutDescription = (LinearLayout) findViewById(R.id.layout_description);
         etAddDescription = (EditText) findViewById(R.id.etAddDescription);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
+
         btnAddDescrition = (Button) findViewById(R.id.btnAddDescription);
         btnAddDescrition.setOnClickListener(this);
-
-        cardFaces = new ArrayList<>();
 
         menuFab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
         miniFab1 = (FloatingActionButton) findViewById(R.id.miniFab1);
@@ -74,12 +91,6 @@ public class DescriptionActivity extends AppCompatActivity implements View.OnCli
         miniFab4 = (FloatingActionButton) findViewById(R.id.miniFab4);
         miniFab4.setOnClickListener(this);
 
-        Bundle extras = getIntent().getExtras();
-        if(extras !=null){
-            cardFaces = (ArrayList<CardFace>) extras.get("DescriptionArray");
-            position = extras.getInt("DescriptionPosition");
-        }
-        collapsingToolbarLayout.setTitle(cardFaces.get(position).getName());
     }
 
     @Override
@@ -111,6 +122,12 @@ public class DescriptionActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        menuFab.collapse();
+    }
+
     //Close FABMenu, when missClick
     @Override
     public boolean dispatchTouchEvent(MotionEvent event){
@@ -124,9 +141,7 @@ public class DescriptionActivity extends AppCompatActivity implements View.OnCli
                     menuFab.collapse();
             }
         }
-
         return super.dispatchTouchEvent(event);
     }
-
 
 }

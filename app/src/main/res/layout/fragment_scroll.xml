@@ -64,8 +64,28 @@
                     android:layout_height="1px"
                     android:background="#CCC" />
 
-                <include layout="@layout/content_card"/>
+                <include layout="@layout/card_in_list"/>
+                <include layout="@layout/card_in_list"/>
 
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
+
+                <include layout="@layout/card_in_list"/>
 
             </LinearLayout>
 

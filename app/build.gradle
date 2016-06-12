@@ -40,4 +40,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'io.realm:android-adapters:1.2.2'
+    compile 'org.solovyev.android.views:linear-layout-manager:0.5@aar'
 }

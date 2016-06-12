@@ -5,7 +5,7 @@ import android.app.Application;
 import android.support.v4.app.Fragment;
 
 
-import com.treggo.flexible.model.MainModel;
+import com.treggo.flexible.model.Board;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -57,7 +57,7 @@ public class RealmController {
     //Refresh the realm istance
     public void waitForChange() {
 
-        realm.waitForChange();
+        realm.setAutoRefresh(true);
     }
 
     public void stopWaitForChange() {
@@ -73,28 +73,28 @@ public class RealmController {
         realm.commitTransaction();
     }
 
-    //find all objects in the Book.class
-    public RealmResults<MainModel> getMainModels() {
+    //find all objects in the Board.class
+    public RealmResults<Board> getBoards() {
 
-        return realm.where(MainModel.class).findAll();
+        return realm.where(Board.class).findAll();
     }
 
     //query a single item with the given id
-    public MainModel getMainModel(String id) {
+    public Board getBoard(String id) {
 
-        return realm.where(MainModel.class).equalTo("id", id).findFirst();
+        return realm.where(Board.class).equalTo("id", id).findFirst();
     }
 
     //check if Book.class is empty
-    public boolean hasMainModel() {
+    public boolean hasBoard() {
 
-        return !realm.where(MainModel.class).isValid();
+        return !realm.where(Board.class).isValid();
     }
 
     //query example
-    public RealmResults<MainModel> queryedBooks() {
+    public RealmResults<Board> queryedBooks() {
 
-        return realm.where(MainModel.class)
+        return realm.where(Board.class)
                 .contains("author", "Author 0")
                 .or()
                 .contains("title", "Realm")

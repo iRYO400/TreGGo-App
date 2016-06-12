@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,7 @@ import com.treggo.flexible.R;
 public class ScrollViewFragment extends Fragment {
 
     private static final String BUNDLE_CODE = "titleScroll";
-
+    private static final String TAG = "mLogs";
     ObservableScrollView scrollView;
     LinearLayout linearLayout;
     TextView title;
@@ -64,13 +65,13 @@ public class ScrollViewFragment extends Fragment {
 
                 LayoutInflater layoutInflater = (LayoutInflater)
                         getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                linearLayout.addView(layoutInflater.inflate(R.layout.content_card, (ViewGroup) view, false), 2);
+                linearLayout.addView(layoutInflater.inflate(R.layout.card_in_list, (ViewGroup) view, false), 2);
 
             }
         });
 
         title.setText(getArguments().getString(BUNDLE_CODE));
-
+        Log.d(TAG, " SCROLL " + getArguments().getString(BUNDLE_CODE));
         buttonMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,8 +1,10 @@
 package com.treggo.flexible.utilities;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,80 +12,86 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.treggo.flexible.R;
-import com.treggo.flexible.model.CardFace;
+import com.treggo.flexible.adapters.RealmRecyclerViewAdapter;
+import com.treggo.flexible.app.RealmController;
+import com.treggo.flexible.model.Board;
 
-import java.util.ArrayList;
+import io.realm.Realm;
 
 /**
  * Created by iRYO400 on 07.06.2016.
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerAdapter extends RealmRecyclerViewAdapter<Board> {
 
-    protected static final int TYPE_HEADER = 0;
-    protected static final int TYPE_CELL = 1;
+
+    private static final String TAG = "mLogs";
 
     private Context context;
-    private ArrayList<CardFace> faceCards;
+    private Realm realm;
+    private long boardID;
+    private int boardPosition;
+    private int listPosition;
 
+    private TinyDB tinyDB;
 
-    public RecyclerAdapter(Context context, ArrayList<CardFace> arrayList){
-
+    public RecyclerAdapter(Context context, long boardID, int listPosition){
         this.context = context;
-        this.faceCards = arrayList;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView name;
-        private View label;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            name = (TextView)itemView.findViewById(R.id.cardNameTV);
-            label =  itemView.findViewById(R.id.label1);
-        }
+        this.boardID = boardID;
+        this.listPosition = listPosition;
     }
 
     @Override
-    public int getItemViewType(int position) {
-        switch (position){
-            case 0:
-                return TYPE_HEADER;
-            default:
-                return TYPE_CELL;
-        }
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+        tinyDB = new TinyDB(context);
+        boardPosition = tinyDB.getInt("boardPosition");
         switch (viewType){
-//            case TYPE_HEADER:
-//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hvp_header_placeholder, parent,false);
-//                break;
             default:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_card, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_in_list, parent, false);
                 break;
         }
-
-        return new ViewHolder(view) {};
+        return new CardListViewHolder(view);
     }
-    
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(faceCards.get(position).getName());
-        if(faceCards.get(position).getColor() != -1){
-            holder.label.setVisibility(View.VISIBLE);
-            holder.label.setBackgroundColor(Color.BLACK);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
+        this.realm = RealmController.getInstance().getRealm();
+
+        CardListViewHolder cardListVH = (CardListViewHolder) holder;
+
+        //Имя карточки в списке
+        if(getItem(boardPosition).getMyLists().get(listPosition).getCards().isValid()) {
+            cardListVH.card_list_name.setText(getItem(boardPosition).getMyLists().get(listPosition).getCards().get(position).getName());
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return faceCards.size();
+        if(getRealmAdapter() != null){
+//            return 3;
+            try {
+                return getRealmAdapter().getItem(boardPosition).getMyLists().get(listPosition).getCards().size();
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                Log.d(TAG, "Cyka o5 ETA OSHIBKA. B_Position " + boardPosition + " L_Position " + listPosition);
+            }
+
+        }
+        return 0;
+    }
+
+    public static class CardListViewHolder extends RecyclerView.ViewHolder {
+
+        private CardView card_list;
+        private TextView card_list_name;
+
+        public CardListViewHolder(View itemView) {
+            super(itemView);
+
+            card_list = (CardView) itemView.findViewById(R.id.card_list);
+            card_list_name = (TextView)itemView.findViewById(R.id.card_list_name);
+        }
     }
 }

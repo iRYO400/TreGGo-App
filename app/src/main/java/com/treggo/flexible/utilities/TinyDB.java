@@ -21,17 +21,6 @@
 
 package com.treggo.flexible.utilities;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-
-import com.google.gson.Gson;
-import com.treggo.flexible.model.Board;
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -41,6 +30,15 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 
 public class TinyDB {
@@ -318,18 +316,18 @@ public class TinyDB {
 
 
 
-    public ArrayList<Board> getListBoards(String key, Class<?> mClass){
-        Gson gson = new Gson();
-
-        ArrayList<String> objStrings = getListString(key);
-        ArrayList<Board> objects =  new ArrayList<Board>();
-
-        for(String jObjString : objStrings){
-            Board value  = (Board) gson.fromJson(jObjString,  mClass);
-            objects.add(value);
-        }
-        return objects;
-    }
+//    public ArrayList<Board> getListBoards(String key, Class<?> mClass){
+//        Gson gson = new Gson();
+//
+//        ArrayList<String> objStrings = getListString(key);
+//        ArrayList<Board> objects =  new ArrayList<Board>();
+//
+//        for(String jObjString : objStrings){
+//            Board value  = (Board) gson.fromJson(jObjString,  mClass);
+//            objects.add(value);
+//        }
+//        return objects;
+//    }
 
     
     public  Object getObject(String key, Class<?> classOfT){
@@ -483,15 +481,15 @@ public class TinyDB {
      * @param objArray is the Object you want to put
      */
 
-    public void putListBoards(String key, ArrayList<Board> objArray){
-        checkForNullKey(key);
-        Gson gson = new Gson();
-        ArrayList<String> objStrings = new ArrayList<String>();
-        for(Object obj : objArray){
-            objStrings.add(gson.toJson(obj));
-        }
-        putListString(key, objStrings);
-    }
+//    public void putListBoards(String key, ArrayList<Board> objArray){
+//        checkForNullKey(key);
+//        Gson gson = new Gson();
+//        ArrayList<String> objStrings = new ArrayList<String>();
+//        for(Object obj : objArray){
+//            objStrings.add(gson.toJson(obj));
+//        }
+//        putListString(key, objStrings);
+//    }
     
     /**
      * Remove SharedPreferences item with 'key'
