@@ -9,7 +9,7 @@ import android.view.View;
 
 /**
  * Created by iRYO400 on 08.06.2016.
- * Downloaded from https://gist.github.com/lnikkila/d9493a0626e89059c6aa
+ * Modified from https://gist.github.com/lnikkila/d9493a0626e89059c6aa
  */
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
 
@@ -19,6 +19,8 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
     @Nullable
     private View childView;
+
+    private RecyclerView.ViewHolder viewHolder;
 
     private int childViewPosition;
 
@@ -31,7 +33,6 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent event) {
         childView = view.findChildViewUnder(event.getX(), event.getY());
         childViewPosition = view.getChildPosition(childView);
-
         return childView != null && gestureDetector.onTouchEvent(event);
     }
 
@@ -64,7 +65,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
          * @param childView View of the item that was long pressed.
          * @param position  Position of the item that was long pressed.
          */
-        public void onItemLongPress(View childView, int position);
+        public void onItemLongPress(View childView, int position, RecyclerView.ViewHolder viewHolder);
 
     }
 
@@ -109,7 +110,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
         @Override
         public void onLongPress(MotionEvent event) {
             if (childView != null) {
-                listener.onItemLongPress(childView, childViewPosition);
+                listener.onItemLongPress(childView, childViewPosition, viewHolder);
             }
         }
 

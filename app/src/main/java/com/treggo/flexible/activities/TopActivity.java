@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.shamanland.fab.FloatingActionButton;
 import com.treggo.flexible.R;
-import com.treggo.flexible.adapters.BoardsAdapter;
+import com.treggo.flexible.adapters.BoardsRecyclerAdapter;
 import com.treggo.flexible.adapters.RealmBoardsAdapter;
 import com.treggo.flexible.app.Preferences;
 import com.treggo.flexible.app.RealmController;
@@ -29,7 +29,7 @@ import io.realm.RealmResults;
 
 public class TopActivity extends AppCompatActivity {
 
-    private BoardsAdapter mmAdapter;
+    private BoardsRecyclerAdapter mmAdapter;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
 
@@ -134,7 +134,7 @@ public class TopActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mmAdapter = new BoardsAdapter(this);
+        mmAdapter = new BoardsRecyclerAdapter(this);
         recyclerView.setAdapter(mmAdapter);
     }
 

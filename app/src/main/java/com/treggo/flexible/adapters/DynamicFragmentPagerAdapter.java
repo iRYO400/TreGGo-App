@@ -13,12 +13,12 @@ import java.util.ArrayList;
 /**
  * Created by iRYO400 on 11.06.2016.
  */
-public class CustomFragmentPagerAdapter extends ArrayFragmentStatePagerAdapter<String> {
+public class DynamicFragmentPagerAdapter extends ArrayFragmentStatePagerAdapter<String> {
 
     private Board board;
     private long boardID;
 
-    public CustomFragmentPagerAdapter(FragmentManager fm, ArrayList<String> ss, Board board, long id) {
+    public DynamicFragmentPagerAdapter(FragmentManager fm, ArrayList<String> ss, Board board, long id) {
         super(fm, ss);
         this.board = board;
         this.boardID = id;

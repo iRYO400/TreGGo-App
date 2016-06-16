@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +26,13 @@ import io.realm.RealmResults;
 /**
  * Created by iRYO400 on 09.06.2016.
  */
-public class BoardsAdapter extends RealmRecyclerViewAdapter<Board> {
+public class BoardsRecyclerAdapter extends RealmRecyclerViewAdapter<Board> {
 
     final Context context;
     private Realm realm;
     private TinyDB tinyDB;
 
-    public BoardsAdapter(Context context){
+    public BoardsRecyclerAdapter(Context context){
         this.context = context;
     }
 
@@ -49,11 +50,27 @@ public class BoardsAdapter extends RealmRecyclerViewAdapter<Board> {
         final Board board = getItem(position);
 
         CardViewHolder cardViewHolder = (CardViewHolder) holder;
+        //Check for Validation,
+        //if yes,
+        //set Name and Checkbox
         if(getItem(position).isValid()) {
             cardViewHolder.nameBoard.setText(board.getName());
-//            cardViewHolder.cbFavorite.setChecked(board.isFavorite());
+            cardViewHolder.cbFavorite.setChecked(board.isFavorite());
         }
 
+        //is Board Favorite?
+        cardViewHolder.cbFavorite.setTag(getItem(position));
+        cardViewHolder.cbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                CheckBox checkBox = (CheckBox) buttonView;
+                Board b = (Board) checkBox.getTag();
+                realm.beginTransaction();
+                b.setFavorite(checkBox.isChecked());
+                realm.copyToRealm(b);
+                realm.commitTransaction();
+            }
+        });
 
         //Override LONG click
         cardViewHolder.card_board.setOnLongClickListener(new View.OnLongClickListener() {
@@ -106,7 +123,6 @@ public class BoardsAdapter extends RealmRecyclerViewAdapter<Board> {
         }
         return 0;
     }
-
 
     public static class CardViewHolder extends RecyclerView.ViewHolder{
 

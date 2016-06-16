@@ -14,6 +14,14 @@ public class MyList extends RealmObject {
 
     private RealmList<Card> cards;
 
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
     public RealmList<Card> getCards() {
         return cards;
     }

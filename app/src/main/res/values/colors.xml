@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="greenLabel">#4CAF50</color>
+    <color name="blueLabel">#2196F3</color>
+    <color name="redLabel">#F44336</color>
+    <color name="yellowLabel">#FFEB3B</color>
+    <color name="purpleLabel">#9C27B0</color>
+    <color name="blueGreyLabel">#607D8B</color>
 </resources>

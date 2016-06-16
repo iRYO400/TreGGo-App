@@ -25,6 +25,7 @@
         android:text="COLUMNS!"/>
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:orientation="horizontal"
         android:layout_height="wrap_content"

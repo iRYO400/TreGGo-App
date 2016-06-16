@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import com.github.florent37.hollyviewpager.HollyViewPager;
 import com.github.florent37.hollyviewpager.HollyViewPagerConfigurator;
 import com.treggo.flexible.R;
-import com.treggo.flexible.adapters.CustomFragmentPagerAdapter;
+import com.treggo.flexible.adapters.DynamicFragmentPagerAdapter;
 import com.treggo.flexible.app.RealmController;
 import com.treggo.flexible.model.Board;
 import com.treggo.flexible.model.MyList;
@@ -25,7 +25,7 @@ public class MiddleActivity extends AppCompatActivity {
     private Board board;
     private int boardType;
 
-    private CustomFragmentPagerAdapter myStatePagerAdapter;
+    private DynamicFragmentPagerAdapter myStatePagerAdapter;
     private HollyViewPager hollyViewPager;
     private Toolbar toolbar;
 
@@ -53,6 +53,7 @@ public class MiddleActivity extends AppCompatActivity {
             setupAllFragments(realm, board);
         }
 
+
         getSupportActionBar().setTitle(board.getName());
         hollyViewPager = (HollyViewPager) findViewById(R.id.hollyViewPager);
         hollyViewPager.getViewPager().setPageMargin(getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
@@ -67,7 +68,7 @@ public class MiddleActivity extends AppCompatActivity {
             names.add(board.getMyLists().get(i).getName());
         }
 
-        myStatePagerAdapter = new CustomFragmentPagerAdapter(getSupportFragmentManager(), names, board, boardID);
+        myStatePagerAdapter = new DynamicFragmentPagerAdapter(getSupportFragmentManager(), names, board, boardID);
         hollyViewPager.setAdapter(myStatePagerAdapter);
     }
 
@@ -81,7 +82,7 @@ public class MiddleActivity extends AppCompatActivity {
             case 0:
                 for (int i = 0; i < Constants.STANDART.length; i++) {
                     myList = new MyList();
-                    myList.setName(Constants.MONTHS[i]);
+                    myList.setName(Constants.STANDART[i]);
                     myLists.add(myList);
                 }
                 break;

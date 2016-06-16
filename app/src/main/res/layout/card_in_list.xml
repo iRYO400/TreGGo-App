@@ -19,7 +19,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
             <View
                 android:id="@+id/label1"
                 android:layout_margin="5dp"
@@ -66,9 +67,11 @@
         <TextView
             android:id="@+id/card_list_name"
             android:layout_width="wrap_content"
-            android:layout_margin="5dp"
             android:text="testName"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

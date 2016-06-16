@@ -18,6 +18,16 @@ public class Board extends RealmObject {
 
     private RealmList<MyList> myLists;
 
+    private boolean isFavorite;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
     public RealmList<MyList> getMyLists() {
         return myLists;
     }
