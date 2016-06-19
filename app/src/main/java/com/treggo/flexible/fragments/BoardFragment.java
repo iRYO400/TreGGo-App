@@ -5,13 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -20,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.treggo.flexible.R;
+import com.treggo.flexible.model.Card;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.DragItem;
 
@@ -32,10 +28,9 @@ public class BoardFragment extends Fragment {
 
     private BoardView mBoardView;
 
-
-
-    public static BoardFragment newInstance(){
-        return new BoardFragment();
+    public static BoardFragment newInstance(long id, int listPosition){
+        BoardFragment fragment = new BoardFragment();
+        return fragment;
     }
 
     @Override
@@ -48,6 +43,7 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_board, container, false);
 
+        setupAllCards();
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
         mBoardView.setSnapToColumnWhenDragging(true);
@@ -61,10 +57,7 @@ public class BoardFragment extends Fragment {
 
             @Override
             public void onItemChangedColumn(int oldColumn, int newColumn) {
-                TextView itemCount1 = (TextView) mBoardView.getHeaderView(oldColumn).findViewById(R.id.item_count);
-                itemCount1.setText(Integer.toString(mBoardView.getAdapter(oldColumn).getItemCount()));
-                TextView itemCount2 = (TextView) mBoardView.getHeaderView(newColumn).findViewById(R.id.item_count);
-                itemCount2.setText(Integer.toString(mBoardView.getAdapter(newColumn).getItemCount()));
+
             }
 
             @Override
@@ -77,84 +70,24 @@ public class BoardFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Board");
-
-        addColumnList();
-        addColumnList();
-        addColumnList();
-        addColumnList();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_board, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.action_disable_drag).setVisible(mBoardView.isDragEnabled());
-        menu.findItem(R.id.action_enable_drag).setVisible(!mBoardView.isDragEnabled());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_disable_drag:
-                mBoardView.setDragEnabled(false);
-                getActivity().invalidateOptionsMenu();
-                return true;
-            case R.id.action_enable_drag:
-                mBoardView.setDragEnabled(true);
-                getActivity().invalidateOptionsMenu();
-                return true;
-            case R.id.action_add_column:
-                addColumnList();
-                return true;
-            case R.id.action_remove_column:
-                mBoardView.removeColumn(0);
-                return true;
-            case R.id.action_clear_board:
-                mBoardView.clearBoard();
-                return true;
+    private void setupAllCards(){
+        ArrayList<Card> cards = new ArrayList<>();
+        Card card = new Card();
+        cards.add(card);
+        for(int i = 0; i < 2; i++) {
+            card = new Card();
+            card.setName("Example Card");
+            card.setCardID(i + System.currentTimeMillis());
+            cards.add(card);
         }
-        return super.onOptionsItemSelected(item);
-    }
+        ItemAdapter itemAdapter = new ItemAdapter(cards, R.layout.column_item, R.id.item_layout, true);
 
-    private void addColumnList() {
-        final ArrayList<Pair<Long, String>> mItemArray = new ArrayList<>();
-        int addItems = 15;
-        for (int i = 0; i < addItems; i++) {
-            long id = sCreatedItems++;
-            mItemArray.add(new Pair<>(id, "Item " + id));
+
+        try {
+            mBoardView.addColumnList(itemAdapter, null, true);
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
-
-        final int column = mColumns;
-        final ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.column_item, R.id.item_layout, true);
-        final View header = View.inflate(getActivity(), R.layout.column_header, null);
-        ((TextView) header.findViewById(R.id.text)).setText("Column " + (mColumns + 1));
-        ((TextView) header.findViewById(R.id.item_count)).setText("" + addItems);
-        header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                long id = sCreatedItems++;
-                Pair item = new Pair<>(id, "Test " + id);
-                mBoardView.addItem(column, 0, item, true);
-                //mBoardView.moveItem(4, 0, 0, true);
-                //mBoardView.removeItem(column, 0);
-                //mBoardView.moveItem(0, 0, 1, 3, false);
-                //mBoardView.replaceItem(0, 0, item1, true);
-                ((TextView) header.findViewById(R.id.item_count)).setText("" + mItemArray.size());
-            }
-        });
-
-        mBoardView.addColumnList(listAdapter, header, false);
-        mColumns++;
     }
 
     private static class MyDragItem extends DragItem {
@@ -167,8 +100,8 @@ public class BoardFragment extends Fragment {
         public void onBindDragView(View clickedView, View dragView) {
             CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
             ((TextView) dragView.findViewById(R.id.text)).setText(text);
-            CardView dragCard = ((CardView) dragView.findViewById(R.id.card));
-            CardView clickedCard = ((CardView) clickedView.findViewById(R.id.card));
+            CardView dragCard = ((CardView) dragView.findViewById(R.id.cardl));
+            CardView clickedCard = ((CardView) clickedView.findViewById(R.id.cardl));
 
             dragCard.setMaxCardElevation(40);
             dragCard.setCardElevation(clickedCard.getCardElevation());
@@ -178,8 +111,8 @@ public class BoardFragment extends Fragment {
 
         @Override
         public void onMeasureDragView(View clickedView, View dragView) {
-            CardView dragCard = ((CardView) dragView.findViewById(R.id.card));
-            CardView clickedCard = ((CardView) clickedView.findViewById(R.id.card));
+            CardView dragCard = ((CardView) dragView.findViewById(R.id.cardl));
+            CardView clickedCard = ((CardView) clickedView.findViewById(R.id.cardl));
             int widthDiff = dragCard.getPaddingLeft() - clickedCard.getPaddingLeft() + dragCard.getPaddingRight() -
                     clickedCard.getPaddingRight();
             int heightDiff = dragCard.getPaddingTop() - clickedCard.getPaddingTop() + dragCard.getPaddingBottom() -
@@ -195,7 +128,7 @@ public class BoardFragment extends Fragment {
 
         @Override
         public void onStartDragAnimation(View dragView) {
-            CardView dragCard = ((CardView) dragView.findViewById(R.id.card));
+            CardView dragCard = ((CardView) dragView.findViewById(R.id.cardl));
             ObjectAnimator anim = ObjectAnimator.ofFloat(dragCard, "CardElevation", dragCard.getCardElevation(), 40);
             anim.setInterpolator(new DecelerateInterpolator());
             anim.setDuration(ANIMATION_DURATION);
@@ -204,7 +137,7 @@ public class BoardFragment extends Fragment {
 
         @Override
         public void onEndDragAnimation(View dragView) {
-            CardView dragCard = ((CardView) dragView.findViewById(R.id.card));
+            CardView dragCard = ((CardView) dragView.findViewById(R.id.cardl));
             ObjectAnimator anim = ObjectAnimator.ofFloat(dragCard, "CardElevation", dragCard.getCardElevation(), 6);
             anim.setInterpolator(new DecelerateInterpolator());
             anim.setDuration(ANIMATION_DURATION);

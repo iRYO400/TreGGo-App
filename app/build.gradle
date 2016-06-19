@@ -46,5 +46,5 @@ dependencies {
     compile 'io.realm:android-adapters:1.2.2'
     compile 'org.solovyev.android.views:linear-layout-manager:0.5@aar'
     compile 'net.opacapp:multiline-collapsingtoolbar:1.0.1'
-    compile 'com.github.woxthebox:draglistview:1.2.6'
+    compile 'com.github.woxthebox:draglistview:1.2.7'
 }

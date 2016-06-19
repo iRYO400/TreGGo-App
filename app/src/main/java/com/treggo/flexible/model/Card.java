@@ -9,6 +9,8 @@ import io.realm.RealmObject;
  */
 public class Card extends RealmObject {
 
+    private long cardID;
+
     private String name;
 
     private String description;
@@ -16,6 +18,14 @@ public class Card extends RealmObject {
     private RealmList<Label> labelList;
 
     private RealmList<CheckList> checkLists;
+
+    public long getCardID() {
+        return cardID;
+    }
+
+    public void setCardID(long cardID) {
+        this.cardID = cardID;
+    }
 
     public RealmList<CheckList> getCheckLists() {
         return checkLists;
