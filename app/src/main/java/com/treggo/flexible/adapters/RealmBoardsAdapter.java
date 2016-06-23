@@ -2,7 +2,7 @@ package com.treggo.flexible.adapters;
 
 import android.content.Context;
 
-import com.treggo.flexible.model.Board;
+import com.treggo.flexible.board.Board;
 
 import io.realm.RealmResults;
 

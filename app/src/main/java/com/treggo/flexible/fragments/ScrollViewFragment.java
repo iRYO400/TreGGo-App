@@ -77,7 +77,7 @@ public class ScrollViewFragment extends Fragment {
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
                 PopupMenu popupMenu = new PopupMenu(getContext(), v);
-                popupMenu.inflate(R.menu.popupmenu);
+                popupMenu.inflate(R.menu.list_options);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {

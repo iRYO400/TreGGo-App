@@ -73,19 +73,6 @@
                 <include layout="@layout/card_in_list"/>
 
                 <include layout="@layout/card_in_list"/>
-
-                <include layout="@layout/card_in_list"/>
-
-                <include layout="@layout/card_in_list"/>
-
-                <include layout="@layout/card_in_list"/>
-
-                <include layout="@layout/card_in_list"/>
-
-                <include layout="@layout/card_in_list"/>
-
-                <include layout="@layout/card_in_list"/>
-
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

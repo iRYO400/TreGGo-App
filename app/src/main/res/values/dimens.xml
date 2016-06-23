@@ -10,6 +10,9 @@
     <dimen name="fab_marginRight">8dp</dimen>
     <dimen name="fab_marginBottom">-20dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="minimum_width_free_label">32dp</dimen>
+    <dimen name="minimum_width_free_label_card">24dp</dimen>
+    <dimen name="minimum_height_free_label_card">6dp</dimen>
 
 
     <dimen name="margin_normal">8dp</dimen>

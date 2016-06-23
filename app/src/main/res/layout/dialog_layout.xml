@@ -3,48 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="15dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_margin="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Name your BOARD!"/>
     <EditText
+        android:layout_margin="15dp"
         android:id="@+id/EditTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_margin="5dp"
-        android:layout_width="match_parent"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:text="COLUMNS!"/>
-
-    <RelativeLayout
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-        <TextView
-            android:id="@+id/customTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Custom?"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="false"
-            android:layout_marginRight="10dp" />
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/customTV"/>
-    </RelativeLayout>
+        android:text="COLUMNS!"
+        android:layout_gravity="center_horizontal" />
     <Spinner
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"

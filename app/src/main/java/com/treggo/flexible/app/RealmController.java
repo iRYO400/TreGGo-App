@@ -5,7 +5,7 @@ import android.app.Application;
 import android.support.v4.app.Fragment;
 
 
-import com.treggo.flexible.model.Board;
+import com.treggo.flexible.board.Board;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

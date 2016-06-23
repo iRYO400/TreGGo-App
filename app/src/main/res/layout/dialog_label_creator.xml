@@ -20,7 +20,7 @@
                 android:id="@+id/etLabel1"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#00FF00"
+                android:background="@drawable/label_background_blue"
                 android:layout_weight="1" />
 
             <CheckBox
@@ -41,7 +41,7 @@
                 android:id="@+id/etLabel2"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#FF0000"
+                android:background="@drawable/label_background_green"
                 android:layout_weight="1" />
 
             <CheckBox
@@ -61,7 +61,7 @@
                 android:id="@+id/etLabel3"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#0000FF"
+                android:background="@drawable/label_background_grey"
                 android:layout_weight="1" >
 
             </EditText>
@@ -84,6 +84,7 @@
                 android:id="@+id/etLabel4"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="@drawable/label_background_red"
                 android:layout_weight="1" />
 
             <CheckBox
@@ -103,6 +104,7 @@
                 android:id="@+id/etLabel5"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="@drawable/label_background_yellow"
                 android:layout_weight="1" />
 
             <CheckBox
@@ -122,6 +124,7 @@
                 android:id="@+id/etLabel6"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="@drawable/label_background_pink"
                 android:layout_weight="1" />
 
             <CheckBox

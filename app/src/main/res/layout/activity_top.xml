@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.treggo.flexible.activities.TopActivity">
+    tools:context=".board.TopActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -40,17 +40,16 @@
         android:layout_marginBottom="@dimen/fab_marginBottom"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end">
-        <com.shamanland.fab.FloatingActionButton
+        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="20dp"
-            android:src="@android:drawable/ic_btn_speak_now"
-            />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            fab:fab_colorNormal="#ffffff"
+            fab:fab_colorPressed="#909090"
+            fab:fab_icon="@drawable/ic_attachment_black_24dp"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

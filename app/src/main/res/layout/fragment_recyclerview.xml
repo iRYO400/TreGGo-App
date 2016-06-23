@@ -1,12 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recyclerView"
+<com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/viewpager_margin_fix"
-    android:paddingRight="@dimen/viewpager_margin_fix"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:scrollbars="none">
 
+    <LinearLayout
+        android:id="@+id/layout_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
+        <include layout="@layout/hvp_header_placeholder" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/btnXOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@android:color/white"
+                android:text="@string/vertical_ellipsis" />
+
+            <Button
+                android:id="@+id/btnXAddRec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@android:color/white"
+                android:text="+" />
+
+            <TextView
+                android:id="@+id/titleRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1.7"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="TITLE"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#CCC" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/label_background_grey"/>
+    </LinearLayout>
+</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>

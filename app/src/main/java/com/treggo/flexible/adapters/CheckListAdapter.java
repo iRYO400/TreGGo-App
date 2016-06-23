@@ -8,7 +8,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.treggo.flexible.R;
-import com.treggo.flexible.model.CheckList;
+import com.treggo.flexible.card.models.CheckList;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;

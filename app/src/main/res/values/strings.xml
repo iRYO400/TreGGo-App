@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_top">TopActivity</string>
+    <string name="vertical_ellipsis">&#8942;</string>
+    <string name="plus">&#x002B;</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -96,4 +98,12 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_description">DescriptionActivity</string>
     <string name="add_description">Edit description</string>
+    <string name="remove_card">Delete Card</string>
+    <string name="move_left">Move to Left</string>
+    <string name="move_right">Move to Right</string>
+    <string name="rename_card">Rename</string>
+    <string name="lable_free">      </string>
+    <string name="attach_photo">Photo</string>
+    <string name="attach_another_file">Another File</string>
+    <string name="attach_heart">Heart</string>
 </resources>

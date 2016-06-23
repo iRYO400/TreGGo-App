@@ -1,94 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.treggo.flexible.activities.DescriptionActivity"
+    tools:context="com.treggo.flexible.card.DescriptionActivity"
     tools:showIn="@layout/activity_description">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <EditText
-            android:visibility="gone"
             android:id="@+id/etAddDescription"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_margin="7dp"
             android:layout_weight="1"
-            android:layout_margin="7dp" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvDescription"
-            android:text="@string/add_description"
-            android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/text_margin" />
+            android:padding="16dp"
+            android:text="@string/add_description"
+
+            android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/layout_labels"
-            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="25dp"
-                android:src="@drawable/ic_loyalty_black_24dp"
-                android:layout_height="25dp"/>
-            <TextView
-                android:layout_margin="5dp"
-                android:id="@+id/tvLabel1"
-                android:text="test"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp" />
-            <TextView
-                android:layout_margin="5dp"
-                android:id="@+id/tvLabel2"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp" />
-            <TextView
-                android:layout_margin="5dp"
-                android:id="@+id/tvLabel3"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp" />
-            <TextView
-                android:layout_margin="5dp"
-                android:id="@+id/tvLabel4"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp" />
-            <TextView
-                android:layout_margin="5dp"
-                android:id="@+id/tvLabel5"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp" />
-            <TextView
-                android:layout_margin="5dp"
-                android:id="@+id/tvLabel6"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_loyalty_black_24dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerLabelView"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#CCC" />
+
         <LinearLayout
-            android:id="@+id/layout_checkList"
-            android:visibility="visible"
+            android:id="@+id/layout_attachments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:visibility="visible">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_attachment_black_24dp" />
 
-            <include layout="@layout/checklist"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerAttachView"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/layout_checkList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include layout="@layout/checklist" />
         </LinearLayout>
     </LinearLayout>
-
-
 
 
 </android.support.v4.widget.NestedScrollView>

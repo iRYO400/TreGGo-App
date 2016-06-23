@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu1"
+        android:title="@string/rename_card"
+        />
+    <item
+        android:id="@+id/menu2"
+        android:title="@string/remove_card"
+        />
+    <item
+        android:id="@+id/menu3"
+        android:title="@string/move_left"
+        />
+    <item
+        android:id="@+id/menu4"
+        android:title="@string/move_right"
+        />
+</menu>
