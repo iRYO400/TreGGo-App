@@ -12,10 +12,19 @@
         <item name="windowActionBar">false</item>
 
         <!-- Toolbar Theme / Apply white arrow -->
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="searchViewStyle">@style/AppSearchViewStyle</item>
+
+        <item name="colorControlNormal">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="19">true</item>
+    </style>
 
+    <style name="AppSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:textCursorDrawable">@drawable/white_cursor</item>
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="searchIcon">@drawable/icon_toolbar_search</item>
+        <item name="closeIcon">@drawable/icon_toolbar_clear</item>
 
+        <item name="android:imeActionId">6</item>
     </style>
 
     <style name="AppTheme.Card.Margins" parent="CardView">

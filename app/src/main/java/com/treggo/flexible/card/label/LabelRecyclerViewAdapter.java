@@ -15,6 +15,7 @@ import com.treggo.flexible.board.Board;
 public class LabelRecyclerViewAdapter extends RealmRecyclerViewLabelAdapter<Board> {
 
     private static final String TAG = "mLogs";
+    EditLabelsFromAdapter editLabelsFromAdapter;
 
     private Context context;
     private Board board;
@@ -31,13 +32,13 @@ public class LabelRecyclerViewAdapter extends RealmRecyclerViewLabelAdapter<Boar
     @Override
     public LabelRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_label, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_label, parent, false);
         return new LabelRecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(LabelRecyclerViewHolder holder, int position) {
-
+        editLabelsFromAdapter = (EditLabelsFromAdapter) context;
         if(board.getMyLists().get(lPosition).getCards().get(cPosition).getLabelList().isValid()) {
             if (board.getMyLists().get(lPosition).getCards().get(cPosition).getLabelList().get(position).isChecked()) {
                 holder.labelName.setMinWidth(context.getResources().getDimensionPixelOffset(R.dimen.minimum_width_free_label));
@@ -63,9 +64,14 @@ public class LabelRecyclerViewAdapter extends RealmRecyclerViewLabelAdapter<Boar
                             holder.card_label.setBackgroundResource(R.drawable.label_background_pink);
                             break;
                     }
-                Log.d(TAG, "LABEL NAME " + board.getMyLists().get(lPosition).getCards().get(cPosition).getLabelList().get(position).getLabelName());
             }
         }
+        holder.card_label.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editLabelsFromAdapter.editLabels();
+            }
+        });
     }
 
     @Override

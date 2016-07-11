@@ -1,10 +1,12 @@
 package com.treggo.flexible.lists;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.github.florent37.hollyviewpager.HollyViewPager;
 import com.github.florent37.hollyviewpager.HollyViewPagerConfigurator;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
-public class MiddleActivity extends AppCompatActivity{
+public class MiddleActivity extends AppCompatActivity implements Refresher{
 
 
     private Realm realm;
@@ -25,8 +27,9 @@ public class MiddleActivity extends AppCompatActivity{
     private Board board;
     private int boardType;
 
-    private DynamicFragmentPagerAdapter myStatePagerAdapter;
+    private SmartFragmentStatePagerAdapter myStatePagerAdapter;
     private HollyViewPager hollyViewPager;
+
     private Toolbar toolbar;
 
     @Override
@@ -37,6 +40,12 @@ public class MiddleActivity extends AppCompatActivity{
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         this.realm = RealmController.getInstance().getRealm();
 
@@ -53,6 +62,9 @@ public class MiddleActivity extends AppCompatActivity{
             setupAllFragments(realm, board);
         }
 
+//        viewPager = (ViewPager) findViewById(R.id.vpPager);
+//        viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+
 
         getSupportActionBar().setTitle(board.getName());
         hollyViewPager = (HollyViewPager) findViewById(R.id.hollyViewPager);
@@ -68,24 +80,9 @@ public class MiddleActivity extends AppCompatActivity{
             names.add(board.getMyLists().get(i).getName());
         }
 
-        myStatePagerAdapter = new DynamicFragmentPagerAdapter(getSupportFragmentManager(), board, boardID);
+        myStatePagerAdapter = new SmartFragmentStatePagerAdapter(getSupportFragmentManager(), board, boardID);
         hollyViewPager.setAdapter(myStatePagerAdapter);
-
-        hollyViewPager.getViewPager().addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.d("mLogs", " Position is " + position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                Log.d("mLogs", " State is " + state);
-            }
-        });
+//        viewPager.setAdapter(myStatePagerAdapter);
     }
 
     private void setupAllFragments(Realm realm, Board board) {
@@ -132,4 +129,14 @@ public class MiddleActivity extends AppCompatActivity{
     }
 
 
+    @Override
+    public void refreshActivity(int position) {
+
+        myStatePagerAdapter.getRegisteredFragment(hollyViewPager.getViewPager().getCurrentItem());
+        if((hollyViewPager.getViewPager().getCurrentItem()-1) != -1) {
+            myStatePagerAdapter.getRegisteredFragment(hollyViewPager.getViewPager().getCurrentItem() - 1);
+        }else if((hollyViewPager.getViewPager().getCurrentItem()-1) != -1) {
+            myStatePagerAdapter.getRegisteredFragment(hollyViewPager.getViewPager().getCurrentItem() + 1);
+        }
+    }
 }

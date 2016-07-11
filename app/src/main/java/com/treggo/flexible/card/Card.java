@@ -2,7 +2,7 @@ package com.treggo.flexible.card;
 
 
 import com.treggo.flexible.card.attachment.AttachedString;
-import com.treggo.flexible.card.models.CheckList;
+import com.treggo.flexible.card.checkList.CheckList;
 import com.treggo.flexible.card.label.Label;
 
 import io.realm.RealmList;
@@ -13,8 +13,6 @@ import io.realm.RealmObject;
  */
 public class Card extends RealmObject {
 
-    private long cardID;
-
     private String name;
 
     private String description;
@@ -24,14 +22,6 @@ public class Card extends RealmObject {
     private RealmList<Label> labelList;
 
     private RealmList<CheckList> checkLists;
-
-    public long getCardID() {
-        return cardID;
-    }
-
-    public void setCardID(long cardID) {
-        this.cardID = cardID;
-    }
 
     public RealmList<AttachedString> getAttachments() {
         return attachments;

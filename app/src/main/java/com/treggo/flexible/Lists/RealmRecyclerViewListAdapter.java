@@ -28,4 +28,14 @@ public abstract class RealmRecyclerViewListAdapter<T extends RealmObject>
     public long getItemID(int position) {
         return realmBaseAdapter.getItemId(position);
     }
+
+    @Override
+    public void onViewAttachedToWindow(ListsRecyclerAdapter.MyViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
 }

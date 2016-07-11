@@ -11,13 +11,15 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        tools:background="#3FFF"
+        tools:background="#70303030"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <com.github.florent37.hollyviewpager.HollyViewPager
         android:id="@+id/hollyViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
+        android:visibility="visible"
         app:hvp_headerHeight="150dp" />
 </LinearLayout>

@@ -6,7 +6,7 @@
     <dimen name="viewpager_margin_fix">32dp</dimen>
     <dimen name="header_height">150dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="toolbar_height">100dp</dimen>
+    <dimen name="toolbar_height">80dp</dimen>
     <dimen name="fab_marginRight">8dp</dimen>
     <dimen name="fab_marginBottom">-20dp</dimen>
     <dimen name="text_margin">16dp</dimen>
@@ -14,11 +14,14 @@
     <dimen name="minimum_width_free_label_card">24dp</dimen>
     <dimen name="minimum_height_free_label_card">6dp</dimen>
 
-
+    <dimen name="zero">0dp</dimen>
     <dimen name="margin_normal">8dp</dimen>
     <dimen name="margin_large">16dp</dimen>
     <dimen name="text_size_large">16sp</dimen>
     <dimen name="margin_small">0dp</dimen>
     <dimen name="text_size_normal">13sp</dimen>
     <dimen name="imge_book_detail">80dp</dimen>
+
+
+    <dimen name="radius_zero">0dp</dimen>
 </resources>

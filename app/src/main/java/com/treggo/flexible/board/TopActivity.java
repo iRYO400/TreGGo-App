@@ -8,10 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -20,10 +22,13 @@ import com.treggo.flexible.adapters.RealmBoardsAdapter;
 import com.treggo.flexible.app.Preferences;
 import com.treggo.flexible.app.RealmController;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class TopActivity extends AppCompatActivity {
 
@@ -32,45 +37,31 @@ public class TopActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     private Realm realm;
-
-    private ArrayList<String> spTemplates;
-    private ArrayAdapter<String> spinnerAdapter;
-
+    private RealmResults<Board> boards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTop);
+        setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fabTop);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerTop);
-
         //get realm Instance
         this.realm = RealmController.with(this).getRealm();
-
-        //set Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTop);
-        setSupportActionBar(toolbar);
 
         setupRecyclerView();
 
         if(!Preferences.with(this).getPreLoad()){
-//            setRealmData();
+            setRealmData();
         }
 
         // get all persisted objects
         // create the helper adapter and notify data set changes
         // changes will be reflected automatically
-        setRealmAdapter(RealmController.with(this).getBoards());
-
-        //Adding Spinner items
-        spTemplates = new ArrayList<>();
-        spTemplates.add("Base Four");
-        spTemplates.add("Week");
-        spTemplates.add("Months");
-        //Spinner Adapter
-        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spTemplates);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        boards = realm.where(Board.class).findAll();
+        setRealmAdapter(boards);
 
         //FAB
         if (fab != null) {
@@ -78,11 +69,9 @@ public class TopActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     LayoutInflater inflater = LayoutInflater.from(TopActivity.this);
-                    View subView = inflater.inflate(R.layout.dialog_layout, null);
+                    final View subView = inflater.inflate(R.layout.dialog_add_board, null);
+                    final RadioGroup radioGroup = (RadioGroup) subView.findViewById(R.id.radioGroup);
                     final EditText editName = (EditText) subView.findViewById(R.id.EditTextName);
-                    final Spinner spinner = (Spinner) subView.findViewById(R.id.spinner);
-                    spinner.setAdapter(spinnerAdapter);
-                    spinner.setSelection(0);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(TopActivity.this);
                     builder.setTitle("Create your Board");
@@ -91,16 +80,19 @@ public class TopActivity extends AppCompatActivity {
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            int selectedType = radioGroup.indexOfChild(subView.findViewById(radioGroup.getCheckedRadioButtonId()));
+                            String data = getCurrentTimeAndDate();
                             Board board = new Board();
                             board.setId(RealmController.getInstance().getBoards().size() + System.currentTimeMillis());
                             board.setName(editName.getText().toString());
-                            board.setType(spinner.getSelectedItemPosition());
-
+                            board.setType(selectedType);
+                            board.setDateLastView(data);
                             if(editName.getText().toString().equals("")){
                                 Toast.makeText(TopActivity.this, "ENTER CORRECT NAME", Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 //Добавили в имя и тип
+                                Toast.makeText(TopActivity.this, "TIME IS " + getCurrentTimeAndDate(), Toast.LENGTH_SHORT).show();
                                 realm.beginTransaction();
                                 realm.copyToRealm(board);
                                 realm.commitTransaction();
@@ -120,15 +112,33 @@ public class TopActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.top_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.top_action_settings:
+                return true;
+            case R.id.top_action_about:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void setRealmAdapter(RealmResults<Board> boards){
 
-        RealmBoardsAdapter modelsAdapter = new RealmBoardsAdapter(this.getApplicationContext(), boards, true);
+        RealmBoardsAdapter modelsAdapter = new RealmBoardsAdapter(this.getApplicationContext(), boards);
         mmAdapter.setRealmAdapter(modelsAdapter);
         mmAdapter.notifyDataSetChanged();
     }
 
     private void setupRecyclerView(){
-
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -138,34 +148,25 @@ public class TopActivity extends AppCompatActivity {
 
     private void setRealmData() {
 
-        ArrayList<Board> mModels = new ArrayList<>();
-
+        String data = getCurrentTimeAndDate();
         Board mModel = new Board();
-
         mModel.setId(1 + System.currentTimeMillis());
-        mModel.setName("Reto Meier");
+        mModel.setName("Example Board");
         mModel.setType(0);
-        mModels.add(mModel);
+        mModel.setDateLastView(data);
 
-        mModel = new Board();
-        mModel.setId(2 + System.currentTimeMillis());
-        mModel.setName("Itzik Ben-Gan");
-        mModel.setType(0);
-        mModels.add(mModel);
+        // Persist your data easily
+        realm.beginTransaction();
+        realm.copyToRealm(mModel);
+        realm.commitTransaction();
 
-        mModel = new Board();
-        mModel.setId(3 + System.currentTimeMillis());
-        mModel.setName("Magnus Lie Hetland");
-        mModel.setType(0);
-        mModels.add(mModel);
-
-        for (Board b : mModels) {
-            // Persist your data easily
-            realm.beginTransaction();
-            realm.copyToRealm(b);
-            realm.commitTransaction();
-        }
         Preferences.with(this).setPreLoad(true);
+    }
+
+    private String getCurrentTimeAndDate() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
+        return smf.format(c.getTime());
     }
 }
 

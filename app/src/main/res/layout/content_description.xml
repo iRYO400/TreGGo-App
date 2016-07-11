@@ -27,7 +27,6 @@
             android:layout_height="match_parent"
             android:padding="16dp"
             android:text="@string/add_description"
-
             android:textSize="18sp" />
 
         <LinearLayout
@@ -61,9 +60,10 @@
         <LinearLayout
             android:id="@+id/layout_attachments"
             android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -78,15 +78,16 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/layout_checkList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:visibility="gone">
-
-            <include layout="@layout/checklist" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerCheckListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -4,12 +4,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.treggo.flexible.R;
 import com.treggo.flexible.adapters.RealmBoardsAdapter;
 import com.treggo.flexible.adapters.dragDropHelper.OnStartDragListener;
 import com.treggo.flexible.adapters.dragDropHelper.SimpleItemTouchHelperCallback;
-import com.treggo.flexible.adapters.dragDropHelper.UpdateViews;
 import com.treggo.flexible.app.RealmController;
 import com.treggo.flexible.board.Board;
 import com.treggo.flexible.card.Card;
@@ -40,7 +38,7 @@ import io.realm.RealmResults;
 /**
  * Created by iRYO400 on 07.06.2016.
  */
-public class RecyclerViewFragment extends Fragment implements OnStartDragListener, UpdateViews {
+public class RecyclerViewFragment extends Fragment implements OnStartDragListener, AddCards {
 
     private ItemTouchHelper mItemTouchHelper;
 
@@ -60,7 +58,6 @@ public class RecyclerViewFragment extends Fragment implements OnStartDragListene
     private ListsRecyclerAdapter rAdapter;
     private ObservableScrollView scrollView;
     private TextView title;
-    private Button btnAdd;
     private Button btnOptions;
 
     public static RecyclerViewFragment newInstance(long id, int listPosition) {
@@ -101,50 +98,12 @@ public class RecyclerViewFragment extends Fragment implements OnStartDragListene
         super.onViewCreated(view, savedInstanceState);
 
         initiateViewStuff();
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-                View subView = layoutInflater.inflate(R.layout.dialog_add_card, null);
-                final EditText editText = (EditText) subView.findViewById(R.id.editCardName);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Create a new Card");
-                builder.setView(subView);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Card card = new Card();
-                        card.setName(editText.getText().toString());
-                        if (editText.getText().toString().equals("")) {
-                            Toast.makeText(getContext(), "Wrong Name", Toast.LENGTH_SHORT).show();
-                        } else {
-                            realm.beginTransaction();
-                            card = realm.copyToRealm(card);
-                            board.getMyLists().get(listPosition).getCards().add(card);
-                            realm.commitTransaction();
-                            rAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-            }
-        });
     }
 
     private void initiateViewStuff() {
         scrollView = (ObservableScrollView) view.findViewById(R.id.scrollView2);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-
         title = (TextView) view.findViewById(R.id.titleRecycler);
-        btnAdd = (Button) view.findViewById(R.id.btnXAddRec);
         btnOptions = (Button) view.findViewById(R.id.btnXOptions);
 
         setupRecyclerView();
@@ -159,15 +118,49 @@ public class RecyclerViewFragment extends Fragment implements OnStartDragListene
     }
 
     public void setRealmAdapter(RealmResults<Board> boards) {
-        RealmBoardsAdapter boardsAdapter = new RealmBoardsAdapter(getActivity().getApplicationContext(), boards, true);
+        RealmBoardsAdapter boardsAdapter = new RealmBoardsAdapter(getActivity().getApplicationContext(), boards);
         rAdapter.setRealmAdapter(boardsAdapter);
         rAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void updateCurrentView(int position) {
-        recyclerView.removeViewAt(position);
-        rAdapter.notifyDataSetChanged();
+    public void addCard(int position) {
+        createCard(position);
+        recyclerView.requestLayout();
+    }
+
+    private void createCard(final int list_Position){
+
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View subView = layoutInflater.inflate(R.layout.dialog_add_card, null);
+        final EditText editText = (EditText) subView.findViewById(R.id.editCardName);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Create a new Card");
+        builder.setView(subView);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (editText.getText().toString().equals("")) {
+                    Toast.makeText(getContext(), "Wrong Name", Toast.LENGTH_SHORT).show();
+                } else {
+                    Card card = new Card();
+                    card.setName(editText.getText().toString());
+                    realm.beginTransaction();
+                    board.getMyLists().get(list_Position).getCards().add(card);
+                    realm.copyToRealm(board);
+                    realm.commitTransaction();
+                    rAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     private void setupRecyclerView() {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/group_done_discard"
+        android:visible="false">
+        <item
+            android:id="@+id/action_cancel"
+            android:title="Cancel"
+            android:icon="@drawable/ic_close_24dp"
+            yourapp:showAsAction="always"/>
+        <item
+            android:id="@+id/action_done"
+            android:title="OK"
+            android:icon="@drawable/ic_done_24dp"
+            yourapp:showAsAction="always"
+            yourapp:actionViewClass="android.support.v7.widget.OK"/>
+    </group>
+    <group
+        android:id="@+id/group_base"
+        android:visible="true">
+        <item
+            android:id="@+id/action_search"
+            android:title="@android:string/search_go"
+            android:icon="@drawable/icon_toolbar_search"
+            yourapp:showAsAction="always|collapseActionView"
+            yourapp:actionViewClass="android.support.v7.widget.SearchView" />
+        <item
+            android:id="@+id/action_move"
+            android:title="Move Card"
+            yourapp:showAsAction="never"
+            yourapp:actionViewClass="android.support.v7.widget.OK"/>
+
+        <item
+            android:id="@+id/action_delete"
+            android:title="Delete Card"
+            yourapp:showAsAction="never"
+            yourapp:actionViewClass="android.support.v7.widget.OK"/>
+
+    </group>
+
+</menu>

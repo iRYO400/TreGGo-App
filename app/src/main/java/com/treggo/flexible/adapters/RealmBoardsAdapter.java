@@ -11,7 +11,7 @@ import io.realm.RealmResults;
  */
 public class RealmBoardsAdapter extends RealmModelAdapter<Board> {
 
-    public RealmBoardsAdapter(Context context, RealmResults<Board> realmResults, boolean automaticUpdate) {
+    public RealmBoardsAdapter(Context context, RealmResults<Board> realmResults) {
         super(context, realmResults);
     }
 }
